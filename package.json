@@ -1,0 +1,53 @@
+{
+  "name": "node-scaffold-cli",
+  "version": "1.0.0",
+  "description": "CLI tool to generate OOP structure with DI for Node.js projects (Knex/Objection or MongoDB/Mongoose)",
+  "main": "dist/index.js",
+  "bin": {
+    "scaffold": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "cli",
+    "generator",
+    "scaffold",
+    "oop",
+    "dependency-injection",
+    "node",
+    "typescript",
+    "objection",
+    "mongoose",
+    "knex",
+    "express",
+    "rest-api"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Trapintrovert/node-scaffold-cli"
+  },
+  "homepage": "https://github.com/Trapintrovert/node-scaffold-cli#readme",
+  "bugs": {
+    "url": "https://github.com/Trapintrovert/node-scaffold-cli/issues"
+  },
+  "dependencies": {
+    "commander": "^11.1.0",
+    "inquirer": "^8.2.5",
+    "chalk": "^4.1.2",
+    "fs-extra": "^11.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "@types/inquirer": "^8.2.10",
+    "@types/fs-extra": "^11.0.4",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
