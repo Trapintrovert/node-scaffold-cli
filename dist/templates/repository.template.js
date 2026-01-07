@@ -6,9 +6,10 @@ function generateRepository(config) {
     if (orm === 'knex') {
         return generateKnexRepository(resourceNamePascal, resourceName, useDI);
     }
-    else {
+    else if (orm === 'mongoose') {
         return generateMongoRepository(resourceNamePascal, resourceName, useDI);
     }
+    throw new Error(`Unsupported ORM/ODM: ${orm}`);
 }
 function generateKnexRepository(className, resourceName, useDI) {
     const decorator = useDI ? "@injectable()\n" : "";

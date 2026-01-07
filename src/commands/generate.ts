@@ -5,12 +5,15 @@ import { generateFiles } from '../generators/fileGenerator';
 import { capitalize, toCamelCase, toPascalCase } from '../utils/stringUtils';
 
 interface GenerateOptions {
-  orm: 'knex' | 'mongodb';
+  orm: 'knex' | 'mongoose';
   path: string;
   di: boolean;
 }
 
-export async function generateResource(resourceName: string, options: GenerateOptions) {
+export async function generateResource(
+  resourceName: string,
+  options: GenerateOptions
+) {
   console.log(chalk.blue(`\n🚀 Generating resource: ${resourceName}\n`));
 
   // Prompt for additional details
@@ -29,7 +32,8 @@ export async function generateResource(resourceName: string, options: GenerateOp
     {
       type: 'input',
       name: 'fields',
-      message: 'Enter model fields (comma-separated, e.g., name:string,email:string,age:number):',
+      message:
+        'Enter model fields (comma-separated, e.g., name:string,email:string,age:number):',
       when: (answers) => answers.components.includes('model')
     }
   ]);
@@ -49,7 +53,7 @@ export async function generateResource(resourceName: string, options: GenerateOp
 
   // Display summary
   console.log(chalk.green('\n✅ Resource generation completed!\n'));
-  
+
   if (result.created.length > 0) {
     console.log(chalk.cyan('Created files:'));
     result.created.forEach((filePath) => {
@@ -86,16 +90,27 @@ export async function generateResource(resourceName: string, options: GenerateOp
   }
 }
 
-function parseFields(fieldsString: string): Array<{ name: string; type: string }> {
+function parseFields(
+  fieldsString: string
+): Array<{ name: string; type: string }> {
   if (!fieldsString.trim()) return [];
-  
-  return fieldsString.split(',').map(field => {
+
+  return fieldsString.split(',').map((field) => {
     const [name, type = 'string'] = field.trim().split(':');
     return { name: name.trim(), type: type.trim() };
   });
 }
 
-function getFilePath(basePath: string, resourceName: string, component: string): string {
-  const componentPlural = component === 'repository' ? 'repositories' : `${component}s`;
-  return path.join(basePath, componentPlural, `${resourceName}.${component}.ts`);
+function getFilePath(
+  basePath: string,
+  resourceName: string,
+  component: string
+): string {
+  const componentPlural =
+    component === 'repository' ? 'repositories' : `${component}s`;
+  return path.join(
+    basePath,
+    componentPlural,
+    `${resourceName}.${component}.ts`
+  );
 }

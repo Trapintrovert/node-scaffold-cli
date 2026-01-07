@@ -1,6 +1,6 @@
 # Node Scaffold CLI
 
-> Generate production-ready Node.js code with OOP architecture, Dependency Injection, and support for Knex (SQL) or MongoDB.
+> Generate production-ready Node.js code with OOP architecture, Dependency Injection, and support for Knex/Objection (SQL) or Mongoose (MongoDB).
 
 ## 🚀 Quick Start
 
@@ -12,8 +12,11 @@ npm install -g node-scaffold-cli
 scaffold g user
 
 # 3. Install required dependencies (see Prerequisites below)
+# For Knex/Objection (SQL):
 npm install express objection knex pg tsyringe reflect-metadata
 npm install -D @types/express @types/node typescript
+# For Mongoose (MongoDB):
+# npm install express mongoose tsyringe reflect-metadata
 
 # 4. Configure TypeScript (see Setup section)
 # 5. Start coding!
@@ -31,12 +34,12 @@ Before using the generated code, you'll need to install dependencies based on yo
 
 ### Quick Dependency Reference
 
-| Setup          | Required Packages                                        |
-| -------------- | -------------------------------------------------------- |
-| **All Setups** | `express`, `@types/express`, `@types/node`, `typescript` |
-| **Knex (SQL)** | `objection`, `knex`, `pg` (or `mysql2`, `sqlite3`, etc.) |
-| **MongoDB**    | `mongoose`                                               |
-| **With DI**    | `tsyringe`, `reflect-metadata`                           |
+| Setup                  | Required Packages                                        |
+| ---------------------- | -------------------------------------------------------- |
+| **All Setups**         | `express`, `@types/express`, `@types/node`, `typescript` |
+| **Knex (SQL)**         | `objection`, `knex`, `pg` (or `mysql2`, `sqlite3`, etc.) |
+| **Mongoose (MongoDB)** | `mongoose`                                               |
+| **With DI**            | `tsyringe`, `reflect-metadata`                           |
 
 ### Installation Commands
 
@@ -47,7 +50,7 @@ npm install express objection knex pg tsyringe reflect-metadata
 npm install -D @types/express @types/node typescript
 ```
 
-**Complete Setup (MongoDB + DI):**
+**Complete Setup (Mongoose + DI):**
 
 ```bash
 npm install express mongoose tsyringe reflect-metadata
@@ -61,7 +64,7 @@ npm install express objection knex pg
 npm install -D @types/express @types/node typescript
 ```
 
-**Without DI (MongoDB):**
+**Without DI (Mongoose):**
 
 ```bash
 npm install express mongoose
@@ -91,7 +94,7 @@ See the [Setup After Generation](#-setup-after-generation) section for complete 
 
 ```
 src/
-├── models/           → Objection (Knex) or Mongoose models
+├── models/           → Objection ORM (Knex) or Mongoose ODM models
 ├── repositories/     → Data access layer with CRUD
 ├── services/         → Business logic layer
 └── controllers/      → Express.js request handlers
@@ -154,7 +157,7 @@ Generate all components at once (interactive prompts):
 
 ```bash
 scaffold generate user
-scaffold g product --orm mongodb
+scaffold g product --orm mongoose
 ```
 
 **When to use:** Starting a new resource from scratch
@@ -175,11 +178,11 @@ scaffold a controller order
 
 ## ⚙️ Options
 
-| Option        | Values            | Default    | Description                  |
-| ------------- | ----------------- | ---------- | ---------------------------- |
-| `--orm` `-o`  | `knex`, `mongodb` | `knex`     | Database ORM                 |
-| `--path` `-p` | any path          | `./src`    | Output directory             |
-| `--no-di`     | -                 | DI enabled | Disable dependency injection |
+| Option        | Values             | Default    | Description                                         |
+| ------------- | ------------------ | ---------- | --------------------------------------------------- |
+| `--orm` `-o`  | `knex`, `mongoose` | `knex`     | ORM/ODM (knex=Objection ORM, mongoose=Mongoose ODM) |
+| `--path` `-p` | any path           | `./src`    | Output directory                                    |
+| `--no-di`     | -                  | DI enabled | Disable dependency injection                        |
 
 ## 🛡️ Safety Features
 
@@ -289,7 +292,7 @@ scaffold g order
 
 ### ✅ Clean Architecture
 
-- **Model** - Data structure (Objection or Mongoose)
+- **Model** - Data structure (Objection ORM for SQL, Mongoose ODM for MongoDB)
 - **Repository** - Database queries
 - **Service** - Business logic + validation
 - **Controller** - HTTP handlers
@@ -332,7 +335,7 @@ npm install express objection knex pg tsyringe reflect-metadata
 npm install -D @types/express @types/node typescript
 ```
 
-**For MongoDB Projects:**
+**For Mongoose (MongoDB) Projects:**
 
 ```bash
 npm install express mongoose tsyringe reflect-metadata
@@ -390,10 +393,10 @@ npx knex migrate:make create_users_table
 npx knex migrate:latest
 ```
 
-**For MongoDB:**
+**For Mongoose (MongoDB):**
 
 ```bash
-# 1. Connect to MongoDB (see EXAMPLES.md)
+# 1. Connect to MongoDB using Mongoose (see EXAMPLES.md)
 # 2. No migrations needed!
 ```
 
@@ -507,7 +510,7 @@ scaffold g user
 ### Example 2: E-commerce Product
 
 ```bash
-scaffold g product --orm mongodb
+scaffold g product --orm mongoose
 # Fields: title:string,price:number,inStock:boolean,images:array
 ```
 
@@ -557,8 +560,8 @@ scaffold g project --orm knex
 
 **Database connection issues:**
 
-- For Knex: Ensure your database driver is installed (`pg`, `mysql2`, etc.)
-- For MongoDB: Ensure `mongoose` is installed
+- For Knex/Objection: Ensure your database driver is installed (`pg`, `mysql2`, etc.)
+- For Mongoose: Ensure `mongoose` is installed
 - See [EXAMPLES.md](./EXAMPLES.md) for complete database setup examples
 
 ### Getting Help

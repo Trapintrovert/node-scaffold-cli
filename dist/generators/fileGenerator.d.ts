@@ -2,7 +2,7 @@ interface GenerateConfig {
     resourceName: string;
     resourceNamePascal: string;
     resourceNameCamel: string;
-    orm: 'knex' | 'mongodb';
+    orm: 'knex' | 'mongoose';
     basePath: string;
     useDI: boolean;
     components: string[];
@@ -11,6 +11,11 @@ interface GenerateConfig {
         type: string;
     }>;
 }
-export declare function generateFiles(config: GenerateConfig): Promise<void>;
+export interface GenerationResult {
+    created: string[];
+    skipped: string[];
+    overwritten: string[];
+}
+export declare function generateFiles(config: GenerateConfig): Promise<GenerationResult>;
 export {};
 //# sourceMappingURL=fileGenerator.d.ts.map

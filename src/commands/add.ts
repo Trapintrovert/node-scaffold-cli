@@ -5,7 +5,7 @@ import { generateFiles } from '../generators/fileGenerator';
 import { toCamelCase, toPascalCase } from '../utils/stringUtils';
 
 interface AddOptions {
-  orm: 'knex' | 'mongodb';
+  orm: 'knex' | 'mongoose';
   path: string;
   di: boolean;
 }

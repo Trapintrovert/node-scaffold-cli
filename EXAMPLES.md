@@ -292,22 +292,22 @@ curl -X PUT http://localhost:3000/api/users/1 \
 curl -X DELETE http://localhost:3000/api/users/1
 ```
 
-## MongoDB Example
+## Mongoose (MongoDB) Example
 
-For MongoDB, follow similar steps but:
+For MongoDB using Mongoose ODM, follow similar steps but:
 
-1. Generate with MongoDB ORM:
+1. Generate with Mongoose ODM:
 ```bash
-scaffold g product --orm mongodb
+scaffold g product --orm mongoose
 ```
 
-2. Install MongoDB dependencies:
+2. Install Mongoose dependencies:
 ```bash
 npm install mongoose
 npm install -D @types/mongoose
 ```
 
-3. Configure MongoDB connection:
+3. Configure Mongoose connection:
 ```typescript
 import mongoose from 'mongoose';
 

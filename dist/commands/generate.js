@@ -41,17 +41,37 @@ async function generateResource(resourceName, options) {
         components: answers.components,
         fields: parseFields(answers.fields || '')
     };
-    await (0, fileGenerator_1.generateFiles)(config);
-    console.log(chalk_1.default.green('\n✅ Resource generated successfully!\n'));
-    console.log(chalk_1.default.cyan('Generated files:'));
-    answers.components.forEach((component) => {
-        const filePath = getFilePath(config.basePath, resourceName, component);
-        console.log(chalk_1.default.gray(`  - ${filePath}`));
-    });
+    const result = await (0, fileGenerator_1.generateFiles)(config);
+    // Display summary
+    console.log(chalk_1.default.green('\n✅ Resource generation completed!\n'));
+    if (result.created.length > 0) {
+        console.log(chalk_1.default.cyan('Created files:'));
+        result.created.forEach((filePath) => {
+            console.log(chalk_1.default.gray(`  - ${filePath}`));
+        });
+    }
+    if (result.overwritten.length > 0) {
+        console.log(chalk_1.default.yellow('\nOverwritten files:'));
+        result.overwritten.forEach((filePath) => {
+            console.log(chalk_1.default.gray(`  - ${filePath}`));
+        });
+    }
+    if (result.skipped.length > 0) {
+        console.log(chalk_1.default.gray('\nSkipped files (already exist):'));
+        result.skipped.forEach((filePath) => {
+            console.log(chalk_1.default.gray(`  - ${filePath}`));
+        });
+    }
     console.log(chalk_1.default.yellow('\n💡 Next steps:'));
     console.log(chalk_1.default.gray('  1. Review the generated files'));
-    console.log(chalk_1.default.gray('  2. Implement business logic in the service'));
-    console.log(chalk_1.default.gray('  3. Register dependencies in your DI container'));
+    if (options.di) {
+        console.log(chalk_1.default.gray('  2. Install reflect-metadata if not already: npm install reflect-metadata'));
+        console.log(chalk_1.default.gray('  3. Implement business logic in the service'));
+        console.log(chalk_1.default.gray('  4. Register dependencies in your DI container'));
+    }
+    else {
+        console.log(chalk_1.default.gray('  2. Implement business logic in the service'));
+    }
 }
 function parseFields(fieldsString) {
     if (!fieldsString.trim())

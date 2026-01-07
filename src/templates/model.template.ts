@@ -2,7 +2,7 @@ interface GenerateConfig {
   resourceName: string;
   resourceNamePascal: string;
   resourceNameCamel: string;
-  orm: 'knex' | 'mongodb';
+  orm: 'knex' | 'mongoose';
   basePath: string;
   useDI: boolean;
   components: string[];
@@ -14,9 +14,11 @@ export function generateModel(config: GenerateConfig): string {
 
   if (orm === 'knex') {
     return generateObjectionModel(resourceNamePascal, fields);
-  } else {
+  } else if (orm === 'mongoose') {
     return generateMongooseModel(resourceNamePascal, fields);
   }
+
+  throw new Error(`Unsupported ORM/ODM: ${orm}`);
 }
 
 function generateObjectionModel(

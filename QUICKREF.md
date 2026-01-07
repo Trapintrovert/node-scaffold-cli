@@ -35,11 +35,11 @@ Valid components: `model`, `repository`, `service`, `controller`
 
 ## Options Quick Reference
 
-| Option    | Short | Description             | Default | Example         |
-| --------- | ----- | ----------------------- | ------- | --------------- |
-| `--orm`   | `-o`  | ORM type (knex/mongodb) | `knex`  | `--orm mongodb` |
-| `--path`  | `-p`  | Base path for files     | `./src` | `--path ./app`  |
-| `--no-di` |       | Disable DI              | `false` | `--no-di`       |
+| Option    | Short | Description                                                      | Default | Example          |
+| --------- | ----- | ---------------------------------------------------------------- | ------- | ---------------- |
+| `--orm`   | `-o`  | ORM/ODM type (knex for Objection ORM, mongoose for Mongoose ODM) | `knex`  | `--orm mongoose` |
+| `--path`  | `-p`  | Base path for files                                              | `./src` | `--path ./app`   |
+| `--no-di` |       | Disable DI                                                       | `false` | `--no-di`        |
 
 ## Common Commands
 
@@ -49,8 +49,8 @@ Valid components: `model`, `repository`, `service`, `controller`
 # Basic generation (Knex with DI)
 scaffold g user
 
-# MongoDB without DI
-scaffold g product --orm mongodb --no-di
+# Mongoose (MongoDB) without DI
+scaffold g product --orm mongoose --no-di
 
 # Custom path
 scaffold g order --path ./app/modules
@@ -65,8 +65,8 @@ scaffold g category --orm knex --path ./src/api
 # Add model only
 scaffold add model user
 
-# Add service with MongoDB
-scaffold add service product --orm mongodb
+# Add service with Mongoose
+scaffold add service product --orm mongoose
 
 # Add controller without DI
 scaffold add controller order --no-di
@@ -77,14 +77,14 @@ scaffold add repository customer --path ./app
 
 ## Field Type Mappings
 
-| Input Type | TypeScript            | SQL (Knex) | MongoDB |
-| ---------- | --------------------- | ---------- | ------- |
-| `string`   | `string`              | VARCHAR    | String  |
-| `number`   | `number`              | INTEGER    | Number  |
-| `boolean`  | `boolean`             | BOOLEAN    | Boolean |
-| `date`     | `Date`                | TIMESTAMP  | Date    |
-| `object`   | `Record<string, any>` | JSON       | Mixed   |
-| `array`    | `any[]`               | JSON       | Array   |
+| Input Type | TypeScript            | SQL (Knex/Objection) | MongoDB (Mongoose) |
+| ---------- | --------------------- | -------------------- | ------------------ |
+| `string`   | `string`              | VARCHAR              | String             |
+| `number`   | `number`              | INTEGER              | Number             |
+| `boolean`  | `boolean`             | BOOLEAN              | Boolean            |
+| `date`     | `Date`                | TIMESTAMP            | Date               |
+| `object`   | `Record<string, any>` | JSON                 | Mixed              |
+| `array`    | `any[]`               | JSON                 | Array              |
 
 ## Field Definition Examples
 
@@ -147,7 +147,7 @@ src/
 - [ ] Run migrations: `npx knex migrate:latest`
 - [ ] Register Knex instance in DI
 
-## MongoDB Setup Checklist
+## Mongoose (MongoDB) Setup Checklist
 
 - [ ] Install: `npm install mongoose`
 - [ ] Create connection function
@@ -188,7 +188,7 @@ scaffold g user --orm knex
 ### 2. MongoDB Resource
 
 ```bash
-scaffold g product --orm mongodb
+scaffold g product --orm mongoose
 # Select all components
 # Add fields: title:string,price:number,inStock:boolean
 # Connect MongoDB

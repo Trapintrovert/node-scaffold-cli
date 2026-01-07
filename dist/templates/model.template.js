@@ -6,9 +6,10 @@ function generateModel(config) {
     if (orm === 'knex') {
         return generateObjectionModel(resourceNamePascal, fields);
     }
-    else {
+    else if (orm === 'mongoose') {
         return generateMongooseModel(resourceNamePascal, fields);
     }
+    throw new Error(`Unsupported ORM/ODM: ${orm}`);
 }
 function generateObjectionModel(className, fields) {
     const tableName = className.toLowerCase() + 's';

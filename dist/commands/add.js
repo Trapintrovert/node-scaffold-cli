@@ -40,12 +40,23 @@ async function addComponent(componentType, resourceName, options) {
         components: [component],
         fields: parseFields(fields)
     };
-    await (0, fileGenerator_1.generateFiles)(config);
+    const result = await (0, fileGenerator_1.generateFiles)(config);
     const componentPlural = component === 'repository' ? 'repositories' : `${component}s`;
     const filePath = path_1.default.join(options.path, componentPlural, `${resourceName.toLowerCase()}.${component}.ts`);
-    console.log(chalk_1.default.green('\n✅ Component added successfully!\n'));
-    console.log(chalk_1.default.cyan('Generated file:'));
-    console.log(chalk_1.default.gray(`  - ${filePath}`));
+    console.log(chalk_1.default.green('\n✅ Component operation completed!\n'));
+    if (result.created.length > 0) {
+        console.log(chalk_1.default.cyan('Created file:'));
+        console.log(chalk_1.default.gray(`  - ${filePath}`));
+    }
+    if (result.overwritten.length > 0) {
+        console.log(chalk_1.default.yellow('Overwritten file:'));
+        console.log(chalk_1.default.gray(`  - ${filePath}`));
+    }
+    if (result.skipped.length > 0) {
+        console.log(chalk_1.default.gray('Skipped file (already exists):'));
+        console.log(chalk_1.default.gray(`  - ${filePath}`));
+        return; // Don't show next steps if file was skipped
+    }
     // Provide contextual next steps
     console.log(chalk_1.default.yellow('\n💡 Next steps:'));
     switch (component) {
@@ -55,30 +66,42 @@ async function addComponent(componentType, resourceName, options) {
                 console.log(chalk_1.default.gray('  2. Create a migration for this model'));
                 console.log(chalk_1.default.gray('  3. Run migrations: npx knex migrate:latest'));
             }
+            if (options.di) {
+                console.log(chalk_1.default.gray('  4. Install reflect-metadata if not already: npm install reflect-metadata'));
+            }
             break;
         case 'repository':
             console.log(chalk_1.default.gray('  1. Ensure the model exists'));
             console.log(chalk_1.default.gray('  2. Implement custom query methods if needed'));
-            console.log(chalk_1.default.gray('  3. Register in DI container if using DI'));
+            if (options.di) {
+                console.log(chalk_1.default.gray('  3. Install reflect-metadata if not already: npm install reflect-metadata'));
+                console.log(chalk_1.default.gray('  4. Register in DI container'));
+            }
             break;
         case 'service':
             console.log(chalk_1.default.gray('  1. Ensure repository and model exist'));
             console.log(chalk_1.default.gray('  2. Implement business logic'));
             console.log(chalk_1.default.gray('  3. Add validation rules'));
-            console.log(chalk_1.default.gray('  4. Register in DI container if using DI'));
+            if (options.di) {
+                console.log(chalk_1.default.gray('  4. Install reflect-metadata if not already: npm install reflect-metadata'));
+                console.log(chalk_1.default.gray('  5. Register in DI container'));
+            }
             break;
         case 'controller':
             console.log(chalk_1.default.gray('  1. Ensure service exists'));
             console.log(chalk_1.default.gray('  2. Register routes in your Express app'));
             console.log(chalk_1.default.gray('  3. Add authentication/authorization middleware if needed'));
-            console.log(chalk_1.default.gray('  4. Register in DI container if using DI'));
+            if (options.di) {
+                console.log(chalk_1.default.gray('  4. Install reflect-metadata if not already: npm install reflect-metadata'));
+                console.log(chalk_1.default.gray('  5. Register in DI container'));
+            }
             break;
     }
 }
 function parseFields(fieldsString) {
     if (!fieldsString.trim())
         return [];
-    return fieldsString.split(',').map(field => {
+    return fieldsString.split(',').map((field) => {
         const [name, type = 'string'] = field.trim().split(':');
         return { name: name.trim(), type: type.trim() };
     });

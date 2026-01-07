@@ -7,7 +7,7 @@ function generateController(config) {
     const imports = useDI
         ? `import { injectable, inject } from 'tsyringe';\n`
         : '';
-    const idType = orm === 'knex' ? 'number' : 'string';
+    const idType = orm === 'knex' ? 'number' : 'string'; // mongoose uses string IDs
     return `${imports}import { Request, Response, NextFunction } from 'express';
 import { ${resourceNamePascal}Service } from '../services/${resourceName}.service';
 

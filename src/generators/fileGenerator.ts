@@ -11,7 +11,7 @@ interface GenerateConfig {
   resourceName: string;
   resourceNamePascal: string;
   resourceNameCamel: string;
-  orm: 'knex' | 'mongodb';
+  orm: 'knex' | 'mongoose';
   basePath: string;
   useDI: boolean;
   components: string[];

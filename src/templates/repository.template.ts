@@ -2,7 +2,7 @@ interface GenerateConfig {
   resourceName: string;
   resourceNamePascal: string;
   resourceNameCamel: string;
-  orm: 'knex' | 'mongodb';
+  orm: 'knex' | 'mongoose';
   basePath: string;
   useDI: boolean;
   components: string[];
@@ -14,9 +14,11 @@ export function generateRepository(config: GenerateConfig): string {
 
   if (orm === 'knex') {
     return generateKnexRepository(resourceNamePascal, resourceName, useDI);
-  } else {
+  } else if (orm === 'mongoose') {
     return generateMongoRepository(resourceNamePascal, resourceName, useDI);
   }
+  
+  throw new Error(`Unsupported ORM/ODM: ${orm}`);
 }
 
 function generateKnexRepository(className: string, resourceName: string, useDI: boolean): string {

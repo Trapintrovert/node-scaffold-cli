@@ -197,7 +197,7 @@ Create a test directory and generate resources:
 mkdir test-output
 cd test-output
 scaffold g user --orm knex --path ./src
-scaffold g product --orm mongodb --path ./app
+scaffold g product --orm mongoose --path ./app
 ```
 
 Verify:

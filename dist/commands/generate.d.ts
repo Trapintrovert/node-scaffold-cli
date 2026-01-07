@@ -1,5 +1,5 @@
 interface GenerateOptions {
-    orm: 'knex' | 'mongodb';
+    orm: 'knex' | 'mongoose';
     path: string;
     di: boolean;
 }

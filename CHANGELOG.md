@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial release of Node Scaffold CLI
 - Support for generating OOP structure with Dependency Injection
 - Knex (SQL) ORM support
-- MongoDB ORM support
+- Mongoose ODM support (for MongoDB)
 - Model generation with customizable fields
 - Repository pattern implementation
 - Service layer with business logic structure
@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Validation placeholders
 - Error handling structure
 - Configurable output paths
-- Choice between Knex and MongoDB
+- Choice between Knex/Objection (SQL) and Mongoose (MongoDB)
 
 ### Documentation
 - README with installation and usage guide
