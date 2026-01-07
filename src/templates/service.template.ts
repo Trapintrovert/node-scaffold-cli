@@ -11,9 +11,9 @@ interface GenerateConfig {
 
 export function generateService(config: GenerateConfig): string {
   const { resourceNamePascal, resourceName, orm, useDI } = config;
-  
-  const decorator = useDI ? "@injectable()\n" : "";
-  const imports = useDI 
+
+  const decorator = useDI ? '@injectable()\n' : '';
+  const imports = useDI
     ? `import { injectable, inject } from 'tsyringe';\n`
     : '';
 

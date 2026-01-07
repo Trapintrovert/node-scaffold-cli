@@ -17,13 +17,17 @@ export function generateRepository(config: GenerateConfig): string {
   } else if (orm === 'mongoose') {
     return generateMongoRepository(resourceNamePascal, resourceName, useDI);
   }
-  
+
   throw new Error(`Unsupported ORM/ODM: ${orm}`);
 }
 
-function generateKnexRepository(className: string, resourceName: string, useDI: boolean): string {
-  const decorator = useDI ? "@injectable()\n" : "";
-  const imports = useDI 
+function generateKnexRepository(
+  className: string,
+  resourceName: string,
+  useDI: boolean
+): string {
+  const decorator = useDI ? '@injectable()\n' : '';
+  const imports = useDI
     ? `import { injectable, inject } from 'tsyringe';\nimport { Knex } from 'knex';\n`
     : `import { Knex } from 'knex';\n`;
 
@@ -106,9 +110,13 @@ ${decorator}export class ${className}Repository implements I${className}Reposito
 `;
 }
 
-function generateMongoRepository(className: string, resourceName: string, useDI: boolean): string {
-  const decorator = useDI ? "@injectable()\n" : "";
-  const imports = useDI 
+function generateMongoRepository(
+  className: string,
+  resourceName: string,
+  useDI: boolean
+): string {
+  const decorator = useDI ? '@injectable()\n' : '';
+  const imports = useDI
     ? `import { injectable } from 'tsyringe';\nimport { FilterQuery } from 'mongoose';\n`
     : `import { FilterQuery } from 'mongoose';\n`;
 

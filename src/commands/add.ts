@@ -38,8 +38,8 @@ export async function addComponent(
         type: 'input',
         name: 'fields',
         message:
-          'Enter model fields (comma-separated, e.g., name:string,email:string,age:number):'
-      }
+          'Enter model fields (comma-separated, e.g., name:string,email:string,age:number):',
+      },
     ]);
     fields = modelAnswers.fields;
   }
@@ -52,7 +52,7 @@ export async function addComponent(
     basePath: options.path,
     useDI: options.di,
     components: [component],
-    fields: parseFields(fields)
+    fields: parseFields(fields),
   };
 
   const result = await generateFiles(config);

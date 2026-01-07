@@ -31,13 +31,13 @@ export async function generateFiles(
     model: generateModel,
     repository: generateRepository,
     service: generateService,
-    controller: generateController
+    controller: generateController,
   };
 
   const result: GenerationResult = {
     created: [],
     skipped: [],
-    overwritten: []
+    overwritten: [],
   };
 
   // Handle reflect-metadata import if DI is enabled
@@ -62,8 +62,8 @@ export async function generateFiles(
             message: chalk.yellow(
               `File ${chalk.cyan(filePath)} already exists. Overwrite it?`
             ),
-            default: false
-          }
+            default: false,
+          },
         ]);
 
         if (!overwrite) {
@@ -111,7 +111,7 @@ async function ensureReflectMetadataImport(basePath: string): Promise<void> {
     'app.ts',
     'main.ts',
     'server.ts',
-    'config/container.ts'
+    'config/container.ts',
   ];
 
   for (const entryPoint of commonEntryPoints) {

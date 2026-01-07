@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateResource = generateResource;
 const inquirer_1 = __importDefault(require("inquirer"));
 const chalk_1 = __importDefault(require("chalk"));
-const path_1 = __importDefault(require("path"));
 const fileGenerator_1 = require("../generators/fileGenerator");
 const stringUtils_1 = require("../utils/stringUtils");
 async function generateResource(resourceName, options) {
@@ -21,15 +20,15 @@ async function generateResource(resourceName, options) {
                 { name: 'Model', value: 'model', checked: true },
                 { name: 'Repository', value: 'repository', checked: true },
                 { name: 'Service', value: 'service', checked: true },
-                { name: 'Controller', value: 'controller', checked: true }
-            ]
+                { name: 'Controller', value: 'controller', checked: true },
+            ],
         },
         {
             type: 'input',
             name: 'fields',
             message: 'Enter model fields (comma-separated, e.g., name:string,email:string,age:number):',
-            when: (answers) => answers.components.includes('model')
-        }
+            when: (answers) => answers.components.includes('model'),
+        },
     ]);
     const config = {
         resourceName: resourceName.toLowerCase(),
@@ -39,7 +38,7 @@ async function generateResource(resourceName, options) {
         basePath: options.path,
         useDI: options.di,
         components: answers.components,
-        fields: parseFields(answers.fields || '')
+        fields: parseFields(answers.fields || ''),
     };
     const result = await (0, fileGenerator_1.generateFiles)(config);
     // Display summary
@@ -80,9 +79,5 @@ function parseFields(fieldsString) {
         const [name, type = 'string'] = field.trim().split(':');
         return { name: name.trim(), type: type.trim() };
     });
-}
-function getFilePath(basePath, resourceName, component) {
-    const componentPlural = component === 'repository' ? 'repositories' : `${component}s`;
-    return path_1.default.join(basePath, componentPlural, `${resourceName}.${component}.ts`);
 }
 //# sourceMappingURL=generate.js.map
