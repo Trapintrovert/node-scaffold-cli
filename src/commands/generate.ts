@@ -45,20 +45,45 @@ export async function generateResource(resourceName: string, options: GenerateOp
     fields: parseFields(answers.fields || '')
   };
 
-  await generateFiles(config);
+  const result = await generateFiles(config);
 
-  console.log(chalk.green('\n✅ Resource generated successfully!\n'));
-  console.log(chalk.cyan('Generated files:'));
+  // Display summary
+  console.log(chalk.green('\n✅ Resource generation completed!\n'));
   
-  answers.components.forEach((component: string) => {
-    const filePath = getFilePath(config.basePath, resourceName, component);
-    console.log(chalk.gray(`  - ${filePath}`));
-  });
+  if (result.created.length > 0) {
+    console.log(chalk.cyan('Created files:'));
+    result.created.forEach((filePath) => {
+      console.log(chalk.gray(`  - ${filePath}`));
+    });
+  }
+
+  if (result.overwritten.length > 0) {
+    console.log(chalk.yellow('\nOverwritten files:'));
+    result.overwritten.forEach((filePath) => {
+      console.log(chalk.gray(`  - ${filePath}`));
+    });
+  }
+
+  if (result.skipped.length > 0) {
+    console.log(chalk.gray('\nSkipped files (already exist):'));
+    result.skipped.forEach((filePath) => {
+      console.log(chalk.gray(`  - ${filePath}`));
+    });
+  }
 
   console.log(chalk.yellow('\n💡 Next steps:'));
   console.log(chalk.gray('  1. Review the generated files'));
-  console.log(chalk.gray('  2. Implement business logic in the service'));
-  console.log(chalk.gray('  3. Register dependencies in your DI container'));
+  if (options.di) {
+    console.log(
+      chalk.gray(
+        '  2. Install reflect-metadata if not already: npm install reflect-metadata'
+      )
+    );
+    console.log(chalk.gray('  3. Implement business logic in the service'));
+    console.log(chalk.gray('  4. Register dependencies in your DI container'));
+  } else {
+    console.log(chalk.gray('  2. Implement business logic in the service'));
+  }
 }
 
 function parseFields(fieldsString: string): Array<{ name: string; type: string }> {

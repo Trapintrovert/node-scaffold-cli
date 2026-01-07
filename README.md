@@ -5,17 +5,85 @@
 ## 🚀 Quick Start
 
 ```bash
-# Install globally
+# 1. Install the CLI globally
 npm install -g node-scaffold-cli
 
-# Generate a complete resource
+# 2. Generate a complete resource
 scaffold g user
 
-# Or add a single component
-scaffold a model product
+# 3. Install required dependencies (see Prerequisites below)
+npm install express objection knex pg tsyringe reflect-metadata
+npm install -D @types/express @types/node typescript
+
+# 4. Configure TypeScript (see Setup section)
+# 5. Start coding!
 ```
 
 That's it! 🎉
+
+> **Note:** Make sure to install the required dependencies for your chosen ORM and configure TypeScript before using the generated code.
+
+---
+
+## 📦 Prerequisites
+
+Before using the generated code, you'll need to install dependencies based on your setup:
+
+### Quick Dependency Reference
+
+| Setup          | Required Packages                                        |
+| -------------- | -------------------------------------------------------- |
+| **All Setups** | `express`, `@types/express`, `@types/node`, `typescript` |
+| **Knex (SQL)** | `objection`, `knex`, `pg` (or `mysql2`, `sqlite3`, etc.) |
+| **MongoDB**    | `mongoose`                                               |
+| **With DI**    | `tsyringe`, `reflect-metadata`                           |
+
+### Installation Commands
+
+**Complete Setup (Knex + DI):**
+
+```bash
+npm install express objection knex pg tsyringe reflect-metadata
+npm install -D @types/express @types/node typescript
+```
+
+**Complete Setup (MongoDB + DI):**
+
+```bash
+npm install express mongoose tsyringe reflect-metadata
+npm install -D @types/express @types/node typescript
+```
+
+**Without DI (Knex):**
+
+```bash
+npm install express objection knex pg
+npm install -D @types/express @types/node typescript
+```
+
+**Without DI (MongoDB):**
+
+```bash
+npm install express mongoose
+npm install -D @types/express @types/node typescript
+```
+
+### TypeScript Configuration
+
+Your `tsconfig.json` must include these options for DI to work:
+
+```json
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  }
+}
+```
+
+> **Note:** The CLI automatically adds `reflect-metadata` import when DI is enabled, but you still need to install the package.
+
+See the [Setup After Generation](#-setup-after-generation) section for complete TypeScript configuration examples.
 
 ---
 
@@ -113,6 +181,35 @@ scaffold a controller order
 | `--path` `-p` | any path          | `./src`    | Output directory             |
 | `--no-di`     | -                 | DI enabled | Disable dependency injection |
 
+## 🛡️ Safety Features
+
+### Duplicate File Protection
+
+The CLI automatically checks if files already exist before creating them:
+
+- **If file exists:** You'll be prompted to confirm overwrite
+- **If you skip:** The file is preserved and marked as "skipped" in the summary
+- **Summary report:** Shows which files were created, overwritten, or skipped
+
+**Example output:**
+
+```
+✅ Created: src/models/user.model.ts
+✏️  Overwritten: src/repositories/user.repository.ts
+⏭️  Skipped: src/services/user.service.ts
+```
+
+### Automatic DI Setup
+
+When generating with DI enabled (`--di` is default):
+
+- **Auto-detects** entry point files (`index.ts`, `app.ts`, `main.ts`, `server.ts`, `config/container.ts`)
+- **Auto-adds** `import 'reflect-metadata';` if missing
+- **Skips** if already imported
+- **Shows message** when import is added
+
+**Note:** You still need to install: `npm install reflect-metadata`
+
 ---
 
 ## 💡 Common Usage
@@ -120,14 +217,30 @@ scaffold a controller order
 ### Complete Workflow
 
 ```bash
-# 1. Generate resource
+# Step 1: Install CLI (if not already installed)
+npm install -g node-scaffold-cli
+
+# Step 2: Install project dependencies (see Prerequisites above)
+npm install express objection knex pg tsyringe reflect-metadata
+npm install -D @types/express @types/node typescript
+
+# Step 3: Configure TypeScript (see Setup section)
+# Add experimentalDecorators and emitDecoratorMetadata to tsconfig.json
+
+# Step 4: Generate resource
 scaffold g user --orm knex
 
-# 2. You'll be prompted:
+# Step 5: You'll be prompted:
 #    - Select components: ✓ Model ✓ Repository ✓ Service ✓ Controller
 #    - Enter fields: name:string,email:string,age:number
 
-# 3. Done! Files created in src/models, src/repositories, etc.
+# Step 6: If files already exist, you'll be asked to confirm overwrite
+
+# Step 7: Done! Files created in src/models, src/repositories, etc.
+#    - Summary shows: created, overwritten, and skipped files
+#    - reflect-metadata import added automatically (if DI enabled)
+
+# Step 8: Set up database and routes (see Setup section)
 ```
 
 ### Field Types
@@ -200,62 +313,170 @@ scaffold g order
 - Validation placeholders
 - CRUD operations
 
+### ✅ Smart File Management
+
+- **Duplicate detection** - Prompts before overwriting existing files
+- **Automatic setup** - Adds `reflect-metadata` import when DI is enabled
+- **Safe operations** - Shows summary of created, overwritten, and skipped files
+
 ---
 
 ## 🔧 Setup After Generation
 
-### For Knex (SQL):
+### Step 1: Install Dependencies
+
+**For Knex (SQL) Projects:**
 
 ```bash
-# 1. Install dependencies
-npm install objection knex pg
+npm install express objection knex pg tsyringe reflect-metadata
+npm install -D @types/express @types/node typescript
+```
 
-# 2. Create database config
-# See EXAMPLES.md for full setup
+**For MongoDB Projects:**
 
-# 3. Create migration
+```bash
+npm install express mongoose tsyringe reflect-metadata
+npm install -D @types/express @types/node typescript
+```
+
+**Without Dependency Injection:**
+
+```bash
+# Knex
+npm install express objection knex pg
+npm install -D @types/express @types/node typescript
+
+# MongoDB
+npm install express mongoose
+npm install -D @types/express @types/node typescript
+```
+
+### Step 2: Configure TypeScript
+
+Create or update your `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
+```
+
+> **Important:** `experimentalDecorators` and `emitDecoratorMetadata` are required for Dependency Injection to work.
+
+### Step 3: Database Setup
+
+**For Knex (SQL):**
+
+```bash
+# 1. Create database config (see EXAMPLES.md)
+# 2. Create migration
 npx knex migrate:make create_users_table
 
-# 4. Run migrations
+# 3. Run migrations
 npx knex migrate:latest
 ```
 
-### For MongoDB:
+**For MongoDB:**
 
 ```bash
-# 1. Install mongoose
-npm install mongoose
-
-# 2. Connect to MongoDB
-# See EXAMPLES.md for full setup
-
-# 3. No migrations needed!
+# 1. Connect to MongoDB (see EXAMPLES.md)
+# 2. No migrations needed!
 ```
 
-### Setup DI Container:
+### Step 4: Setup DI Container (If Using DI)
+
+**✨ Automatic Setup:** When you generate files with DI enabled, the CLI automatically:
+
+- Detects your entry point file (`index.ts`, `app.ts`, `main.ts`, `server.ts`, or `config/container.ts`)
+- Adds `import 'reflect-metadata';` at the top if it's missing
+- Skips adding if it's already imported
+
+**Manual Setup (if automatic detection fails):**
 
 ```typescript
 // src/config/container.ts
-import 'reflect-metadata';
+import 'reflect-metadata'; // ← Added automatically by CLI
 import { container } from 'tsyringe';
+import { createDatabase } from './database';
+import { UserRepository } from '../repositories/user.repository';
+import { UserService } from '../services/user.service';
+import { UserController } from '../controllers/user.controller';
 
-// Register your components
+// Register database connection
+const db = createDatabase();
 container.register('Database', { useValue: db });
+
+// Register components
 container.register(UserRepository, { useClass: UserRepository });
 container.register(UserService, { useClass: UserService });
+container.register(UserController, { useClass: UserController });
 ```
 
-### Register Routes:
+> **Note:** You still need to install: `npm install tsyringe reflect-metadata`
+
+### Step 5: Register Routes
+
+**With Dependency Injection:**
 
 ```typescript
-// src/server.ts
+// src/server.ts or src/app.ts
+import express from 'express';
 import { container } from 'tsyringe';
 import { UserController } from './controllers/user.controller';
 
+const app = express();
+app.use(express.json());
+
+// Resolve controller from DI container
 const userController = container.resolve(UserController);
 
+// Register routes
 app.get('/api/users', userController.getAll);
+app.get('/api/users/:id', userController.getById);
 app.post('/api/users', userController.create);
+app.put('/api/users/:id', userController.update);
+app.delete('/api/users/:id', userController.delete);
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
+```
+
+**Without Dependency Injection:**
+
+```typescript
+// src/server.ts
+import express from 'express';
+import { UserController } from './controllers/user.controller';
+import { UserService } from './services/user.service';
+import { UserRepository } from './repositories/user.repository';
+import { createDatabase } from './config/database';
+
+const app = express();
+app.use(express.json());
+
+// Manual instantiation
+const db = createDatabase();
+const userRepository = new UserRepository(db);
+const userService = new UserService(userRepository);
+const userController = new UserController(userService);
+
+// Register routes
+app.get('/api/users', userController.getAll);
 // ... more routes
 ```
 
@@ -309,6 +530,46 @@ scaffold g project --orm knex
 
 ---
 
+## 🔍 Troubleshooting
+
+### Common Issues
+
+**"Cannot find module 'express'" or similar errors:**
+
+- Make sure you've installed all required dependencies (see [Prerequisites](#-prerequisites))
+- Run `npm install` in your project directory
+
+**"Decorator metadata is not enabled" or DI not working:**
+
+- Ensure `experimentalDecorators: true` and `emitDecoratorMetadata: true` are in your `tsconfig.json`
+- Make sure `reflect-metadata` is installed: `npm install reflect-metadata`
+- The CLI adds the import automatically, but you need to install the package
+
+**"File already exists" prompt:**
+
+- This is normal! The CLI protects you from accidental overwrites
+- Choose "Yes" to overwrite, or "No" to skip and keep your existing file
+
+**TypeScript compilation errors:**
+
+- Make sure you have `@types/express` and `@types/node` installed
+- Check that your `tsconfig.json` includes the required compiler options
+
+**Database connection issues:**
+
+- For Knex: Ensure your database driver is installed (`pg`, `mysql2`, etc.)
+- For MongoDB: Ensure `mongoose` is installed
+- See [EXAMPLES.md](./EXAMPLES.md) for complete database setup examples
+
+### Getting Help
+
+- **Quick Reference:** Check [QUICKREF.md](./QUICKREF.md) for command examples
+- **Full Examples:** See [EXAMPLES.md](./EXAMPLES.md) for complete setup guides
+- **Issues:** Report problems on GitHub
+- **Questions:** Check documentation files first
+
+---
+
 ## 🤝 Support
 
 - **Issues:** Report on GitHub
@@ -330,6 +591,8 @@ MIT
 3. **Check [QUICKREF.md](./QUICKREF.md)** for quick commands
 4. **Read [EXAMPLES.md](./EXAMPLES.md)** for full setup
 5. **Customize generated code** - it's starter code!
+6. **Safe to re-run** - CLI checks for duplicates and asks before overwriting
+7. **DI setup is automatic** - `reflect-metadata` import is handled for you
 
 ---
 
