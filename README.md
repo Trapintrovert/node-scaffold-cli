@@ -121,11 +121,22 @@ src/
 ```typescript
 export class User extends Model {
   static tableName = 'users';
+  
   static get jsonSchema() {
-    /* validation */
+    return {
+      type: 'object',
+      properties: {
+        id: { type: 'integer' },
+        // Add your fields here
+        created_at: { type: 'string', format: 'date-time' },
+        updated_at: { type: 'string', format: 'date-time' }
+      }
+    };
   }
 }
 ```
+
+> **Note:** Models are generated empty by default. Add your fields manually after generation.
 
 **Repository:**
 
@@ -251,7 +262,6 @@ scaffold g user --orm knex
 
 # Step 5: You'll be prompted:
 #    - Select components: ✓ Model ✓ Repository ✓ Service ✓ Controller
-#    - Enter fields: name:string,email:string,age:number
 
 # Step 6: If files already exist, you'll be asked to confirm overwrite
 
@@ -263,11 +273,30 @@ scaffold g user --orm knex
 # Step 8: Set up database and routes (see Setup section)
 ```
 
-### Field Types
+### Adding Fields to Models
 
-```bash
-# When prompted for fields, use these types:
-name:string,age:number,active:boolean,birth:date,tags:array,meta:object
+Models are generated empty by default. Add fields manually after generation:
+
+```typescript
+// Example: Adding fields to a Knex/Objection model
+export class User extends Model {
+  static tableName = 'users';
+  
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      properties: {
+        id: { type: 'integer' },
+        name: { type: 'string' },
+        email: { type: 'string' },
+        age: { type: 'number' },
+        // Add your fields here
+        created_at: { type: 'string', format: 'date-time' },
+        updated_at: { type: 'string', format: 'date-time' }
+      }
+    };
+  }
+}
 ```
 
 ### Incremental Building
@@ -337,7 +366,7 @@ import { UserController, ProductController } from './controllers';
 
 - Full type safety
 - IntelliSense support
-- Interfaces for everything
+- Type-safe classes and methods
 
 ### ✅ Dependency Injection
 
@@ -527,7 +556,7 @@ app.get('/api/users', userController.getAll);
 | Feature         | `generate`          | `add`                 |
 | --------------- | ------------------- | --------------------- |
 | **Use Case**    | New resource        | Single component      |
-| **Interactive** | Select components   | Only for model fields |
+| **Interactive** | Select components   | No prompts           |
 | **Speed**       | Fast for full setup | Precise control       |
 | **Output**      | Multiple files      | One file              |
 
@@ -541,14 +570,14 @@ app.get('/api/users', userController.getAll);
 
 ```bash
 scaffold g user
-# Fields: name:string,email:string,password:string
+# Models are generated empty - add fields manually after generation
 ```
 
 ### Example 2: E-commerce Product
 
 ```bash
 scaffold g product --orm mongoose
-# Fields: title:string,price:number,inStock:boolean,images:array
+# Models are generated empty - add fields manually after generation
 ```
 
 ### Example 3: Adding Admin Service
