@@ -33,15 +33,7 @@ function generateKnexRepository(
 
   return `${imports}import { ${className} } from '../models/${resourceName}.model';
 
-export interface I${className}Repository {
-  findById(id: number): Promise<${className} | undefined>;
-  findAll(): Promise<${className}[]>;
-  create(data: Omit<${className}, 'id' | 'created_at' | 'updated_at'>): Promise<${className}>;
-  update(id: number, data: Partial<${className}>): Promise<${className} | undefined>;
-  delete(id: number): Promise<boolean>;
-}
-
-${decorator}export class ${className}Repository implements I${className}Repository {
+${decorator}export class ${className}Repository {
   private tableName = '${resourceName}s';
 
   constructor(
@@ -122,15 +114,7 @@ function generateMongoRepository(
 
   return `${imports}import { ${className}, ${className}Model } from '../models/${resourceName}.model';
 
-export interface I${className}Repository {
-  findById(id: string): Promise<${className} | null>;
-  findAll(): Promise<${className}[]>;
-  create(data: Partial<${className}>): Promise<${className}>;
-  update(id: string, data: Partial<${className}>): Promise<${className} | null>;
-  delete(id: string): Promise<boolean>;
-}
-
-${decorator}export class ${className}Repository implements I${className}Repository {
+${decorator}export class ${className}Repository {
   async findById(id: string): Promise<${className} | null> {
     return ${className}Model.findById(id).exec();
   }

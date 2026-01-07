@@ -22,15 +22,7 @@ export function generateService(config: GenerateConfig): string {
   return `${imports}import { ${resourceNamePascal} } from '../models/${resourceName}.model';
 import { ${resourceNamePascal}Repository } from '../repositories/${resourceName}.repository';
 
-export interface I${resourceNamePascal}Service {
-  getById(id: ${idType}): Promise<${resourceNamePascal} | null>;
-  getAll(): Promise<${resourceNamePascal}[]>;
-  create(data: Partial<${resourceNamePascal}>): Promise<${resourceNamePascal}>;
-  update(id: ${idType}, data: Partial<${resourceNamePascal}>): Promise<${resourceNamePascal} | null>;
-  delete(id: ${idType}): Promise<boolean>;
-}
-
-${decorator}export class ${resourceNamePascal}Service implements I${resourceNamePascal}Service {
+${decorator}export class ${resourceNamePascal}Service {
   constructor(
     ${useDI ? `@inject(${resourceNamePascal}Repository) ` : ''}private ${resourceName}Repository: ${resourceNamePascal}Repository
   ) {}

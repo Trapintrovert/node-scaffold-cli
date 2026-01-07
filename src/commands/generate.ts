@@ -28,13 +28,6 @@ export async function generateResource(
         { name: 'Controller', value: 'controller', checked: true },
       ],
     },
-    {
-      type: 'input',
-      name: 'fields',
-      message:
-        'Enter model fields (comma-separated, e.g., name:string,email:string,age:number):',
-      when: (answers) => answers.components.includes('model'),
-    },
   ]);
 
   const config = {
@@ -45,7 +38,7 @@ export async function generateResource(
     basePath: options.path,
     useDI: options.di,
     components: answers.components,
-    fields: parseFields(answers.fields || ''),
+    fields: [],
   };
 
   const result = await generateFiles(config);
@@ -87,15 +80,4 @@ export async function generateResource(
   } else {
     console.log(chalk.gray('  2. Implement business logic in the service'));
   }
-}
-
-function parseFields(
-  fieldsString: string
-): Array<{ name: string; type: string }> {
-  if (!fieldsString.trim()) return [];
-
-  return fieldsString.split(',').map((field) => {
-    const [name, type = 'string'] = field.trim().split(':');
-    return { name: name.trim(), type: type.trim() };
-  });
 }
