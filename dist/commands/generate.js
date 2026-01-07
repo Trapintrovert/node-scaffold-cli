@@ -76,7 +76,7 @@ async function generateResource(resourceName, options) {
 function parseFields(fieldsString) {
     if (!fieldsString.trim())
         return [];
-    return fieldsString.split(',').map(field => {
+    return fieldsString.split(',').map((field) => {
         const [name, type = 'string'] = field.trim().split(':');
         return { name: name.trim(), type: type.trim() };
     });

@@ -9,7 +9,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "prepare": "husky install"
   },
   "keywords": [
     "cli",
@@ -45,7 +46,10 @@
     "@types/node": "^20.10.6",
     "@types/inquirer": "^8.2.10",
     "@types/fs-extra": "^11.0.4",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "husky": "^9.0.0",
+    "@commitlint/cli": "^18.4.4",
+    "@commitlint/config-conventional": "^18.4.4"
   },
   "engines": {
     "node": ">=14.0.0"
