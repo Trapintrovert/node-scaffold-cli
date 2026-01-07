@@ -84,6 +84,9 @@ export async function generateFiles(
         console.log(chalk.green(`  ✅ Created: ${filePath}`));
         result.created.push(filePath);
       }
+
+      // Update barrel export in index.ts
+      await updateBarrelExport(config, component);
     }
   }
 
@@ -177,5 +180,65 @@ async function ensureReflectMetadataImport(basePath: string): Promise<void> {
     chalk.gray(
       '     Please manually add: import "reflect-metadata"; at the top of your app entry file.'
     )
+  );
+}
+
+/**
+ * Updates or creates index.ts barrel export file for the component folder
+ */
+async function updateBarrelExport(
+  config: GenerateConfig,
+  component: string
+): Promise<void> {
+  const { basePath, resourceName } = config;
+  const componentPlural =
+    component === 'repository' ? 'repositories' : `${component}s`;
+  const componentDir = path.join(basePath, componentPlural);
+  const indexFilePath = path.join(componentDir, 'index.ts');
+
+  // Generate export statement
+  const exportStatement = `export * from './${resourceName}.${component}';`;
+  const exportStatementWithNewline = `${exportStatement}\n`;
+
+  // Check if index.ts exists
+  const indexExists = await fs.pathExists(indexFilePath);
+
+  if (!indexExists) {
+    // Create new index.ts file
+    await fs.writeFile(indexFilePath, exportStatementWithNewline, 'utf-8');
+    console.log(
+      chalk.cyan(`  📦 Created ${componentPlural}/index.ts with barrel export`)
+    );
+    return;
+  }
+
+  // Read existing index.ts
+  const existingContent = await fs.readFile(indexFilePath, 'utf-8');
+
+  // Check if export already exists
+  const exportPattern = new RegExp(
+    `export\\s+\\*\\s+from\\s+['"]\\./${resourceName}\\.${component}['"];?`,
+    'g'
+  );
+
+  if (exportPattern.test(existingContent)) {
+    // Export already exists, skip
+    return;
+  }
+
+  // Add export to the end of the file
+  const lines = existingContent.split('\n');
+  // Remove trailing empty lines
+  while (lines.length > 0 && lines[lines.length - 1].trim() === '') {
+    lines.pop();
+  }
+
+  // Add new export
+  lines.push(exportStatement);
+
+  // Write back
+  await fs.writeFile(indexFilePath, lines.join('\n') + '\n', 'utf-8');
+  console.log(
+    chalk.cyan(`  📦 Updated ${componentPlural}/index.ts with new export`)
   );
 }

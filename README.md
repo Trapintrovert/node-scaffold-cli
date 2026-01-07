@@ -94,11 +94,25 @@ See the [Setup After Generation](#-setup-after-generation) section for complete 
 
 ```
 src/
-├── models/           → Objection ORM (Knex) or Mongoose ODM models
-├── repositories/     → Data access layer with CRUD
-├── services/         → Business logic layer
-└── controllers/      → Express.js request handlers
+├── models/
+│   ├── user.model.ts
+│   ├── product.model.ts
+│   └── index.ts          → Barrel exports (auto-generated)
+├── repositories/
+│   ├── user.repository.ts
+│   ├── product.repository.ts
+│   └── index.ts          → Barrel exports (auto-generated)
+├── services/
+│   ├── user.service.ts
+│   ├── product.service.ts
+│   └── index.ts          → Barrel exports (auto-generated)
+└── controllers/
+    ├── user.controller.ts
+    ├── product.controller.ts
+    └── index.ts          → Barrel exports (auto-generated)
 ```
+
+**Barrel Exports:** Each folder automatically gets an `index.ts` file that exports all components, enabling clean imports like `import { UserModel, ProductModel } from './models'`.
 
 ### Generated Code Example
 
@@ -198,7 +212,9 @@ The CLI automatically checks if files already exist before creating them:
 
 ```
 ✅ Created: src/models/user.model.ts
+📦 Created models/index.ts with barrel export
 ✏️  Overwritten: src/repositories/user.repository.ts
+📦 Updated repositories/index.ts with new export
 ⏭️  Skipped: src/services/user.service.ts
 ```
 
@@ -242,6 +258,7 @@ scaffold g user --orm knex
 # Step 7: Done! Files created in src/models, src/repositories, etc.
 #    - Summary shows: created, overwritten, and skipped files
 #    - reflect-metadata import added automatically (if DI enabled)
+#    - index.ts barrel export files created/updated automatically
 
 # Step 8: Set up database and routes (see Setup section)
 ```
@@ -274,7 +291,26 @@ scaffold g order
 # Result:
 # src/models/user.model.ts, product.model.ts, order.model.ts
 # src/repositories/user.repository.ts, product.repository.ts, ...
+# Each folder has index.ts with barrel exports
 ```
+
+### Clean Imports with Barrel Exports
+
+The CLI automatically creates `index.ts` files in each folder, enabling clean imports:
+
+```typescript
+// Instead of individual imports:
+import { UserModel } from './models/user.model';
+import { ProductModel } from './models/product.model';
+
+// Use barrel exports:
+import { UserModel, ProductModel } from './models';
+import { UserRepository, ProductRepository } from './repositories';
+import { UserService, ProductService } from './services';
+import { UserController, ProductController } from './controllers';
+```
+
+**Note:** Barrel exports are automatically created/updated when you generate files. No manual maintenance needed!
 
 ---
 
@@ -320,6 +356,7 @@ scaffold g order
 
 - **Duplicate detection** - Prompts before overwriting existing files
 - **Automatic setup** - Adds `reflect-metadata` import when DI is enabled
+- **Barrel exports** - Automatically creates/updates `index.ts` files in each folder for clean imports
 - **Safe operations** - Shows summary of created, overwritten, and skipped files
 
 ---

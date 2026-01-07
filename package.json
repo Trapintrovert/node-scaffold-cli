@@ -1,6 +1,6 @@
 {
   "name": "node-scaffold-cli",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "CLI tool to generate OOP structure with DI for Node.js projects (Knex/Objection ORM or Mongoose ODM)",
   "main": "dist/index.js",
   "bin": {
