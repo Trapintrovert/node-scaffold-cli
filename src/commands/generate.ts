@@ -1,6 +1,5 @@
 import inquirer from 'inquirer';
 import chalk from 'chalk';
-import path from 'path';
 import { generateFiles } from '../generators/fileGenerator';
 import { toCamelCase, toPascalCase } from '../utils/stringUtils';
 
@@ -26,16 +25,16 @@ export async function generateResource(
         { name: 'Model', value: 'model', checked: true },
         { name: 'Repository', value: 'repository', checked: true },
         { name: 'Service', value: 'service', checked: true },
-        { name: 'Controller', value: 'controller', checked: true }
-      ]
+        { name: 'Controller', value: 'controller', checked: true },
+      ],
     },
     {
       type: 'input',
       name: 'fields',
       message:
         'Enter model fields (comma-separated, e.g., name:string,email:string,age:number):',
-      when: (answers) => answers.components.includes('model')
-    }
+      when: (answers) => answers.components.includes('model'),
+    },
   ]);
 
   const config = {
@@ -46,7 +45,7 @@ export async function generateResource(
     basePath: options.path,
     useDI: options.di,
     components: answers.components,
-    fields: parseFields(answers.fields || '')
+    fields: parseFields(answers.fields || ''),
   };
 
   const result = await generateFiles(config);
@@ -99,18 +98,4 @@ function parseFields(
     const [name, type = 'string'] = field.trim().split(':');
     return { name: name.trim(), type: type.trim() };
   });
-}
-
-function getFilePath(
-  basePath: string,
-  resourceName: string,
-  component: string
-): string {
-  const componentPlural =
-    component === 'repository' ? 'repositories' : `${component}s`;
-  return path.join(
-    basePath,
-    componentPlural,
-    `${resourceName}.${component}.ts`
-  );
 }

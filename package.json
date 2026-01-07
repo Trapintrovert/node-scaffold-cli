@@ -1,6 +1,6 @@
 {
   "name": "node-scaffold-cli",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "CLI tool to generate OOP structure with DI for Node.js projects (Knex/Objection ORM or Mongoose ODM)",
   "main": "dist/index.js",
   "bin": {
@@ -10,7 +10,12 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "prepublishOnly": "npm run build",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.{ts,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,json,md}\"",
+    "check": "npm run lint && npm run format:check"
   },
   "keywords": [
     "cli",
@@ -49,7 +54,11 @@
     "typescript": "^5.3.3",
     "husky": "^9.0.0",
     "@commitlint/cli": "^18.4.4",
-    "@commitlint/config-conventional": "^18.4.4"
+    "@commitlint/config-conventional": "^18.4.4",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.4"
   },
   "engines": {
     "node": ">=14.0.0"
