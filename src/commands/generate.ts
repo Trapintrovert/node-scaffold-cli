@@ -2,7 +2,7 @@ import inquirer from 'inquirer';
 import chalk from 'chalk';
 import path from 'path';
 import { generateFiles } from '../generators/fileGenerator';
-import { capitalize, toCamelCase, toPascalCase } from '../utils/stringUtils';
+import { toCamelCase, toPascalCase } from '../utils/stringUtils';
 
 interface GenerateOptions {
   orm: 'knex' | 'mongoose';
