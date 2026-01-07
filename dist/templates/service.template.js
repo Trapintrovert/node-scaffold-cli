@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateService = generateService;
 function generateService(config) {
     const { resourceNamePascal, resourceName, orm, useDI } = config;
-    const decorator = useDI ? "@injectable()\n" : "";
+    const decorator = useDI ? '@injectable()\n' : '';
     const imports = useDI
         ? `import { injectable, inject } from 'tsyringe';\n`
         : '';

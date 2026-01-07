@@ -25,8 +25,8 @@ async function addComponent(componentType, resourceName, options) {
             {
                 type: 'input',
                 name: 'fields',
-                message: 'Enter model fields (comma-separated, e.g., name:string,email:string,age:number):'
-            }
+                message: 'Enter model fields (comma-separated, e.g., name:string,email:string,age:number):',
+            },
         ]);
         fields = modelAnswers.fields;
     }
@@ -38,7 +38,7 @@ async function addComponent(componentType, resourceName, options) {
         basePath: options.path,
         useDI: options.di,
         components: [component],
-        fields: parseFields(fields)
+        fields: parseFields(fields),
     };
     const result = await (0, fileGenerator_1.generateFiles)(config);
     const componentPlural = component === 'repository' ? 'repositories' : `${component}s`;

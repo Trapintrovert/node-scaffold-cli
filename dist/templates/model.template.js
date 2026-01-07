@@ -57,7 +57,7 @@ function getJsonSchemaType(type) {
         boolean: 'boolean',
         date: 'string',
         object: 'object',
-        array: 'array'
+        array: 'array',
     };
     return typeMap[type.toLowerCase()] || 'string';
 }
@@ -68,7 +68,7 @@ function getMongooseType(type) {
         boolean: 'Boolean',
         date: 'Date',
         object: 'Object',
-        array: 'Array'
+        array: 'Array',
     };
     return typeMap[type.toLowerCase()] || 'mongoose.Schema.Types.Mixed';
 }

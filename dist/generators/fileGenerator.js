@@ -17,12 +17,12 @@ async function generateFiles(config) {
         model: model_template_1.generateModel,
         repository: repository_template_1.generateRepository,
         service: service_template_1.generateService,
-        controller: controller_template_1.generateController
+        controller: controller_template_1.generateController,
     };
     const result = {
         created: [],
         skipped: [],
-        overwritten: []
+        overwritten: [],
     };
     // Handle reflect-metadata import if DI is enabled
     if (config.useDI) {
@@ -41,8 +41,8 @@ async function generateFiles(config) {
                         type: 'confirm',
                         name: 'overwrite',
                         message: chalk_1.default.yellow(`File ${chalk_1.default.cyan(filePath)} already exists. Overwrite it?`),
-                        default: false
-                    }
+                        default: false,
+                    },
                 ]);
                 if (!overwrite) {
                     console.log(chalk_1.default.gray(`  ⏭️  Skipped: ${filePath}`));
@@ -79,7 +79,7 @@ async function ensureReflectMetadataImport(basePath) {
         'app.ts',
         'main.ts',
         'server.ts',
-        'config/container.ts'
+        'config/container.ts',
     ];
     for (const entryPoint of commonEntryPoints) {
         const entryPath = path_1.default.join(basePath, '..', entryPoint);

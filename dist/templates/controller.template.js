@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateController = generateController;
 function generateController(config) {
     const { resourceNamePascal, resourceName, orm, useDI } = config;
-    const decorator = useDI ? "@injectable()\n" : "";
+    const decorator = useDI ? '@injectable()\n' : '';
     const imports = useDI
         ? `import { injectable, inject } from 'tsyringe';\n`
         : '';
@@ -41,13 +41,15 @@ ${decorator}export class ${resourceNamePascal}Controller {
     try {
       const id = ${idType === 'number' ? 'parseInt(req.params.id, 10)' : 'req.params.id'};
       
-      ${idType === 'number' ? `if (isNaN(id)) {
+      ${idType === 'number'
+        ? `if (isNaN(id)) {
         res.status(400).json({
           success: false,
           message: 'Invalid ID format'
         });
         return;
-      }` : ''}
+      }`
+        : ''}
 
       const ${resourceName} = await this.${resourceName}Service.getById(id);
       
@@ -106,13 +108,15 @@ ${decorator}export class ${resourceNamePascal}Controller {
       const id = ${idType === 'number' ? 'parseInt(req.params.id, 10)' : 'req.params.id'};
       const ${resourceName}Data = req.body;
       
-      ${idType === 'number' ? `if (isNaN(id)) {
+      ${idType === 'number'
+        ? `if (isNaN(id)) {
         res.status(400).json({
           success: false,
           message: 'Invalid ID format'
         });
         return;
-      }` : ''}
+      }`
+        : ''}
 
       if (!${resourceName}Data || Object.keys(${resourceName}Data).length === 0) {
         res.status(400).json({
@@ -150,13 +154,15 @@ ${decorator}export class ${resourceNamePascal}Controller {
     try {
       const id = ${idType === 'number' ? 'parseInt(req.params.id, 10)' : 'req.params.id'};
       
-      ${idType === 'number' ? `if (isNaN(id)) {
+      ${idType === 'number'
+        ? `if (isNaN(id)) {
         res.status(400).json({
           success: false,
           message: 'Invalid ID format'
         });
         return;
-      }` : ''}
+      }`
+        : ''}
 
       const deleted = await this.${resourceName}Service.delete(id);
       

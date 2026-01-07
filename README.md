@@ -16,7 +16,7 @@ scaffold g user
 npm install express objection knex pg tsyringe reflect-metadata
 npm install -D @types/express @types/node typescript
 # For Mongoose (MongoDB):
-# npm install express mongoose tsyringe reflect-metadata
+npm install express mongoose tsyringe reflect-metadata
 
 # 4. Configure TypeScript (see Setup section)
 # 5. Start coding!

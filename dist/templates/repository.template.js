@@ -12,7 +12,7 @@ function generateRepository(config) {
     throw new Error(`Unsupported ORM/ODM: ${orm}`);
 }
 function generateKnexRepository(className, resourceName, useDI) {
-    const decorator = useDI ? "@injectable()\n" : "";
+    const decorator = useDI ? '@injectable()\n' : '';
     const imports = useDI
         ? `import { injectable, inject } from 'tsyringe';\nimport { Knex } from 'knex';\n`
         : `import { Knex } from 'knex';\n`;
@@ -95,7 +95,7 @@ ${decorator}export class ${className}Repository implements I${className}Reposito
 `;
 }
 function generateMongoRepository(className, resourceName, useDI) {
-    const decorator = useDI ? "@injectable()\n" : "";
+    const decorator = useDI ? '@injectable()\n' : '';
     const imports = useDI
         ? `import { injectable } from 'tsyringe';\nimport { FilterQuery } from 'mongoose';\n`
         : `import { FilterQuery } from 'mongoose';\n`;
