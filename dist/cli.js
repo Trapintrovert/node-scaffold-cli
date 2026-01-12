@@ -16,7 +16,7 @@ program
 program
     .command('generate <resource>')
     .alias('g')
-    .description('Generate a new resource (model, controller, repository, service)')
+    .description('Generate a new resource (model, controller, repository, service, router)')
     .option('-o, --orm <type>', 'ORM/ODM type (knex for Objection ORM, mongoose for Mongoose ODM)', 'knex')
     .option('-p, --path <path>', 'Base path for generated files', './src')
     .option('--no-di', 'Generate without dependency injection')
@@ -32,7 +32,7 @@ program
 program
     .command('add <component> <resource>')
     .alias('a')
-    .description('Add a single component (model, repository, service, or controller) for a resource')
+    .description('Add a single component (model, repository, service, controller, or router) for a resource')
     .option('-o, --orm <type>', 'ORM/ODM type (knex for Objection ORM, mongoose for Mongoose ODM)', 'knex')
     .option('-p, --path <path>', 'Base path for generated files', './src')
     .option('--no-di', 'Generate without dependency injection')

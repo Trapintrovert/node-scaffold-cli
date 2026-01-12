@@ -4,6 +4,8 @@
 
 ## 🚀 Quick Start
 
+### For New Projects
+
 ```bash
 # 1. Install the CLI globally
 npm install -g node-scaffold-cli
@@ -21,6 +23,30 @@ npm install express mongoose tsyringe reflect-metadata
 # 4. Configure TypeScript (see Setup section)
 # 5. Start coding!
 ```
+
+### For Existing Projects
+
+```bash
+# Option 1: Install globally (recommended)
+npm install -g node-scaffold-cli
+
+# Option 2: Install as dev dependency in your project
+npm install -D node-scaffold-cli
+# Then use: npx scaffold g user
+
+# Generate files matching your existing structure
+scaffold g user --path ./src
+# Or for nested structures:
+scaffold g user --path ./src/modules
+scaffold g product --path ./app/features
+```
+
+**Key Points:**
+
+- Use `--path` to match your existing project structure
+- Files are generated relative to the specified path
+- CLI won't overwrite existing files without confirmation
+- Works with any TypeScript/Node.js project structure
 
 That's it! 🎉
 
@@ -125,7 +151,7 @@ src/
 ```typescript
 export class User extends Model {
   static tableName = 'users';
-  
+
   static get jsonSchema() {
     return {
       type: 'object',
@@ -133,8 +159,8 @@ export class User extends Model {
         id: { type: 'integer' },
         // Add your fields here
         created_at: { type: 'string', format: 'date-time' },
-        updated_at: { type: 'string', format: 'date-time' }
-      }
+        updated_at: { type: 'string', format: 'date-time' },
+      },
     };
   }
 }
@@ -181,7 +207,7 @@ export class UserController {
 ```typescript
 export class UserRouter {
   public router: Router;
-  
+
   constructor(private userController: UserController) {
     this.router = Router();
     this.setupRoutes();
@@ -233,6 +259,35 @@ scaffold a controller order
 | `--orm` `-o`  | `knex`, `mongoose` | `knex`     | ORM/ODM (knex=Objection ORM, mongoose=Mongoose ODM) |
 | `--path` `-p` | any path           | `./src`    | Output directory                                    |
 | `--no-di`     | -                  | DI enabled | Disable dependency injection                        |
+
+### Using `--path` in Existing Projects
+
+The `--path` option is crucial for integrating with existing projects. It determines where files will be generated:
+
+```bash
+# Standard structure (default)
+scaffold g user --path ./src
+# Generates: src/models/, src/repositories/, etc.
+
+# Nested module structure
+scaffold g user --path ./src/modules/users
+# Generates: src/modules/users/models/, src/modules/users/repositories/, etc.
+
+# Feature-based structure
+scaffold g product --path ./app/features/products
+# Generates: app/features/products/models/, etc.
+
+# Monorepo structure
+scaffold g order --path ./packages/api/src
+# Generates: packages/api/src/models/, etc.
+```
+
+**Tips:**
+
+- Always run the command from your project root
+- Use relative paths (e.g., `./src`, `./app`)
+- The CLI creates the directory structure if it doesn't exist
+- Generated files use relative imports based on the path structure
 
 ## 🛡️ Safety Features
 
@@ -306,7 +361,7 @@ Models are generated empty by default. Add fields manually after generation:
 // Example: Adding fields to a Knex/Objection model
 export class User extends Model {
   static tableName = 'users';
-  
+
   static get jsonSchema() {
     return {
       type: 'object',
@@ -317,8 +372,8 @@ export class User extends Model {
         age: { type: 'number' },
         // Add your fields here
         created_at: { type: 'string', format: 'date-time' },
-        updated_at: { type: 'string', format: 'date-time' }
-      }
+        updated_at: { type: 'string', format: 'date-time' },
+      },
     };
   }
 }
@@ -608,12 +663,12 @@ app.listen(3000, () => {
 
 ## 🆚 Generate vs Add
 
-| Feature         | `generate`          | `add`                 |
-| --------------- | ------------------- | --------------------- |
-| **Use Case**    | New resource        | Single component      |
-| **Interactive** | Select components   | No prompts           |
-| **Speed**       | Fast for full setup | Precise control       |
-| **Output**      | Multiple files      | One file              |
+| Feature         | `generate`          | `add`            |
+| --------------- | ------------------- | ---------------- |
+| **Use Case**    | New resource        | Single component |
+| **Interactive** | Select components   | No prompts       |
+| **Speed**       | Fast for full setup | Precise control  |
+| **Output**      | Multiple files      | One file         |
 
 **Tip:** Use `generate` to start, then `add` for additional components later!
 
@@ -650,6 +705,110 @@ scaffold g tenant --orm knex
 scaffold g user --orm knex
 scaffold g project --orm knex
 # Each gets full CRUD structure
+```
+
+### Example 5: Using in Existing Project
+
+**Scenario:** You have an existing Express API with this structure:
+
+```
+my-api/
+├── src/
+│   ├── config/
+│   ├── middleware/
+│   └── routes/
+└── package.json
+```
+
+**Add a new resource:**
+
+```bash
+# From project root
+scaffold g user --path ./src
+# Generates: src/models/, src/repositories/, src/services/, src/controllers/, src/routers/
+
+# If you prefer a different structure
+scaffold g product --path ./src/modules/products
+# Generates: src/modules/products/models/, etc.
+```
+
+**Add to existing resource:**
+
+```bash
+# You already have a user model, add other components
+scaffold add repository user --path ./src
+scaffold add service user --path ./src
+scaffold add controller user --path ./src
+scaffold add router user --path ./src
+```
+
+### Example 6: Monorepo Structure
+
+```bash
+# In a monorepo with packages/api/src structure
+scaffold g user --path ./packages/api/src
+# Files generated in packages/api/src/models/, etc.
+```
+
+### Example 7: Feature-Based Architecture
+
+```bash
+# Feature-based structure
+scaffold g user --path ./src/features/users
+scaffold g product --path ./src/features/products
+# Each feature has its own models, repositories, etc.
+```
+
+### Example 5: Using in Existing Project
+
+**Scenario:** You have an existing Express API with this structure:
+
+```
+my-api/
+├── src/
+│   ├── config/
+│   ├── middleware/
+│   └── routes/
+└── package.json
+```
+
+**Add a new resource:**
+
+```bash
+# From project root
+scaffold g user --path ./src
+# Generates: src/models/, src/repositories/, src/services/, src/controllers/, src/routers/
+
+# If you prefer a different structure
+scaffold g product --path ./src/modules/products
+# Generates: src/modules/products/models/, etc.
+```
+
+**Add to existing resource:**
+
+```bash
+# You already have a user model, add other components
+scaffold add repository user --path ./src
+scaffold add service user --path ./src
+scaffold add controller user --path ./src
+scaffold add router user --path ./src
+```
+
+### Example 6: Monorepo Structure
+
+```bash
+# In a monorepo with packages/api/src structure
+scaffold g user --path ./packages/api/src
+# Files generated in packages/api/src/models/, etc.
+```
+
+### Example 7: Feature-Based Architecture
+
+```bash
+# Feature-based structure
+scaffold g user --path ./src/features/users
+scaffold g product --path ./src/features/products
+# Each feature has its own models, repositories, etc.
 ```
 
 ---

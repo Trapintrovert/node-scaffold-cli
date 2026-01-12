@@ -8,7 +8,7 @@ const chalk_1 = __importDefault(require("chalk"));
 const path_1 = __importDefault(require("path"));
 const fileGenerator_1 = require("../generators/fileGenerator");
 const stringUtils_1 = require("../utils/stringUtils");
-const VALID_COMPONENTS = ['model', 'repository', 'service', 'controller'];
+const VALID_COMPONENTS = ['model', 'repository', 'service', 'controller', 'router'];
 async function addComponent(componentType, resourceName, options) {
     // Validate component type
     if (!VALID_COMPONENTS.includes(componentType.toLowerCase())) {
@@ -28,7 +28,16 @@ async function addComponent(componentType, resourceName, options) {
         fields: [],
     };
     const result = await (0, fileGenerator_1.generateFiles)(config);
-    const componentPlural = component === 'repository' ? 'repositories' : `${component}s`;
+    let componentPlural;
+    if (component === 'repository') {
+        componentPlural = 'repositories';
+    }
+    else if (component === 'router') {
+        componentPlural = 'routers';
+    }
+    else {
+        componentPlural = `${component}s`;
+    }
     const filePath = path_1.default.join(options.path, componentPlural, `${resourceName.toLowerCase()}.${component}.ts`);
     console.log(chalk_1.default.green('\n✅ Component operation completed!\n'));
     if (result.created.length > 0) {
@@ -81,6 +90,16 @@ async function addComponent(componentType, resourceName, options) {
             if (options.di) {
                 console.log(chalk_1.default.gray('  4. Install reflect-metadata if not already: npm install reflect-metadata'));
                 console.log(chalk_1.default.gray('  5. Register in DI container'));
+            }
+            break;
+        case 'router':
+            console.log(chalk_1.default.gray('  1. Ensure controller exists'));
+            console.log(chalk_1.default.gray('  2. Register router in your Express app'));
+            console.log(chalk_1.default.gray('  3. Example: app.use("/api/users", userRouter.router)'));
+            console.log(chalk_1.default.gray('  4. Add authentication/authorization middleware if needed'));
+            if (options.di) {
+                console.log(chalk_1.default.gray('  5. Install reflect-metadata if not already: npm install reflect-metadata'));
+                console.log(chalk_1.default.gray('  6. Register in DI container'));
             }
             break;
     }

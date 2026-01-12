@@ -12,12 +12,14 @@ const model_template_1 = require("../templates/model.template");
 const repository_template_1 = require("../templates/repository.template");
 const service_template_1 = require("../templates/service.template");
 const controller_template_1 = require("../templates/controller.template");
+const router_template_1 = require("../templates/router.template");
 async function generateFiles(config) {
     const generators = {
         model: model_template_1.generateModel,
         repository: repository_template_1.generateRepository,
         service: service_template_1.generateService,
         controller: controller_template_1.generateController,
+        router: router_template_1.generateRouter,
     };
     const result = {
         created: [],
@@ -68,7 +70,16 @@ async function generateFiles(config) {
 }
 function getComponentPath(config, component) {
     const { basePath, resourceName } = config;
-    const componentPlural = component === 'repository' ? 'repositories' : `${component}s`;
+    let componentPlural;
+    if (component === 'repository') {
+        componentPlural = 'repositories';
+    }
+    else if (component === 'router') {
+        componentPlural = 'routers';
+    }
+    else {
+        componentPlural = `${component}s`;
+    }
     return path_1.default.join(basePath, componentPlural, `${resourceName}.${component}.ts`);
 }
 /**
@@ -127,7 +138,16 @@ async function ensureReflectMetadataImport(basePath) {
  */
 async function updateBarrelExport(config, component) {
     const { basePath, resourceName } = config;
-    const componentPlural = component === 'repository' ? 'repositories' : `${component}s`;
+    let componentPlural;
+    if (component === 'repository') {
+        componentPlural = 'repositories';
+    }
+    else if (component === 'router') {
+        componentPlural = 'routers';
+    }
+    else {
+        componentPlural = `${component}s`;
+    }
     const componentDir = path_1.default.join(basePath, componentPlural);
     const indexFilePath = path_1.default.join(componentDir, 'index.ts');
     // Generate export statement

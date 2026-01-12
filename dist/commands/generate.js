@@ -21,6 +21,7 @@ async function generateResource(resourceName, options) {
                 { name: 'Repository', value: 'repository', checked: true },
                 { name: 'Service', value: 'service', checked: true },
                 { name: 'Controller', value: 'controller', checked: true },
+                { name: 'Router', value: 'router', checked: false },
             ],
         },
     ]);
