@@ -18,7 +18,7 @@ program
   .command('generate <resource>')
   .alias('g')
   .description(
-    'Generate a new resource (model, controller, repository, service)'
+    'Generate a new resource (model, controller, repository, service, router)'
   )
   .option(
     '-o, --orm <type>',
@@ -43,7 +43,7 @@ program
   .command('add <component> <resource>')
   .alias('a')
   .description(
-    'Add a single component (model, repository, service, or controller) for a resource'
+    'Add a single component (model, repository, service, controller, or router) for a resource'
   )
   .option(
     '-o, --orm <type>',

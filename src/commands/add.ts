@@ -10,7 +10,7 @@ interface AddOptions {
   di: boolean;
 }
 
-const VALID_COMPONENTS = ['model', 'repository', 'service', 'controller'];
+const VALID_COMPONENTS = ['model', 'repository', 'service', 'controller', 'router'];
 
 export async function addComponent(
   componentType: string,
@@ -42,8 +42,15 @@ export async function addComponent(
 
   const result = await generateFiles(config);
 
-  const componentPlural =
-    component === 'repository' ? 'repositories' : `${component}s`;
+  let componentPlural: string;
+  if (component === 'repository') {
+    componentPlural = 'repositories';
+  } else if (component === 'router') {
+    componentPlural = 'routers';
+  } else {
+    componentPlural = `${component}s`;
+  }
+  
   const filePath = path.join(
     options.path,
     componentPlural,
@@ -124,6 +131,24 @@ export async function addComponent(
           )
         );
         console.log(chalk.gray('  5. Register in DI container'));
+      }
+      break;
+    case 'router':
+      console.log(chalk.gray('  1. Ensure controller exists'));
+      console.log(chalk.gray('  2. Register router in your Express app'));
+      console.log(
+        chalk.gray('  3. Example: app.use("/api/users", userRouter.router)')
+      );
+      console.log(
+        chalk.gray('  4. Add authentication/authorization middleware if needed')
+      );
+      if (options.di) {
+        console.log(
+          chalk.gray(
+            '  5. Install reflect-metadata if not already: npm install reflect-metadata'
+          )
+        );
+        console.log(chalk.gray('  6. Register in DI container'));
       }
       break;
   }

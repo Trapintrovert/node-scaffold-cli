@@ -6,6 +6,7 @@ import { generateModel } from '../templates/model.template';
 import { generateRepository } from '../templates/repository.template';
 import { generateService } from '../templates/service.template';
 import { generateController } from '../templates/controller.template';
+import { generateRouter } from '../templates/router.template';
 
 interface GenerateConfig {
   resourceName: string;
@@ -32,6 +33,7 @@ export async function generateFiles(
     repository: generateRepository,
     service: generateService,
     controller: generateController,
+    router: generateRouter,
   };
 
   const result: GenerationResult = {
@@ -95,8 +97,16 @@ export async function generateFiles(
 
 function getComponentPath(config: GenerateConfig, component: string): string {
   const { basePath, resourceName } = config;
-  const componentPlural =
-    component === 'repository' ? 'repositories' : `${component}s`;
+  let componentPlural: string;
+
+  if (component === 'repository') {
+    componentPlural = 'repositories';
+  } else if (component === 'router') {
+    componentPlural = 'routers';
+  } else {
+    componentPlural = `${component}s`;
+  }
+
   return path.join(
     basePath,
     componentPlural,
@@ -191,8 +201,16 @@ async function updateBarrelExport(
   component: string
 ): Promise<void> {
   const { basePath, resourceName } = config;
-  const componentPlural =
-    component === 'repository' ? 'repositories' : `${component}s`;
+  let componentPlural: string;
+
+  if (component === 'repository') {
+    componentPlural = 'repositories';
+  } else if (component === 'router') {
+    componentPlural = 'routers';
+  } else {
+    componentPlural = `${component}s`;
+  }
+
   const componentDir = path.join(basePath, componentPlural);
   const indexFilePath = path.join(componentDir, 'index.ts');
 

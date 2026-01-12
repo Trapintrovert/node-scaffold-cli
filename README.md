@@ -106,9 +106,13 @@ src/
 │   ├── user.service.ts
 │   ├── product.service.ts
 │   └── index.ts          → Barrel exports (auto-generated)
-└── controllers/
-    ├── user.controller.ts
-    ├── product.controller.ts
+├── controllers/
+│   ├── user.controller.ts
+│   ├── product.controller.ts
+│   └── index.ts          → Barrel exports (auto-generated)
+└── routers/
+    ├── user.router.ts
+    ├── product.router.ts
     └── index.ts          → Barrel exports (auto-generated)
 ```
 
@@ -169,6 +173,27 @@ export class UserController {
   getById = async (req: Request, res: Response) => {};
   create = async (req: Request, res: Response) => {};
   // ... all CRUD endpoints
+}
+```
+
+**Router:**
+
+```typescript
+export class UserRouter {
+  public router: Router;
+  
+  constructor(private userController: UserController) {
+    this.router = Router();
+    this.setupRoutes();
+  }
+
+  private setupRoutes(): void {
+    this.router.get('/', this.userController.getAll);
+    this.router.get('/:id', this.userController.getById);
+    this.router.post('/', this.userController.create);
+    this.router.put('/:id', this.userController.update);
+    this.router.delete('/:id', this.userController.delete);
+  }
 }
 ```
 
@@ -261,7 +286,7 @@ npm install -D @types/express @types/node typescript
 scaffold g user --orm knex
 
 # Step 5: You'll be prompted:
-#    - Select components: ✓ Model ✓ Repository ✓ Service ✓ Controller
+#    - Select components: ✓ Model ✓ Repository ✓ Service ✓ Controller (Router optional)
 
 # Step 6: If files already exist, you'll be asked to confirm overwrite
 
@@ -307,6 +332,7 @@ scaffold add model user
 scaffold add repository user
 scaffold add service user
 scaffold add controller user
+scaffold add router user
 ```
 
 ### Multiple Resources
@@ -337,6 +363,7 @@ import { UserModel, ProductModel } from './models';
 import { UserRepository, ProductRepository } from './repositories';
 import { UserService, ProductService } from './services';
 import { UserController, ProductController } from './controllers';
+import { UserRouter, ProductRouter } from './routers';
 ```
 
 **Note:** Barrel exports are automatically created/updated when you generate files. No manual maintenance needed!
@@ -361,6 +388,7 @@ import { UserController, ProductController } from './controllers';
 - **Repository** - Database queries
 - **Service** - Business logic + validation
 - **Controller** - HTTP handlers
+- **Router** - Express route definitions
 
 ### ✅ TypeScript Ready
 
@@ -499,7 +527,29 @@ container.register(UserController, { useClass: UserController });
 
 ### Step 5: Register Routes
 
-**With Dependency Injection:**
+**With Router (Recommended):**
+
+```typescript
+// src/server.ts or src/app.ts
+import express from 'express';
+import { container } from 'tsyringe';
+import { UserRouter } from './routers/user.router';
+
+const app = express();
+app.use(express.json());
+
+// Resolve router from DI container
+const userRouter = container.resolve(UserRouter);
+
+// Register router
+app.use('/api/users', userRouter.router);
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
+```
+
+**With Dependency Injection (Direct Controller):**
 
 ```typescript
 // src/server.ts or src/app.ts
@@ -530,6 +580,7 @@ app.listen(3000, () => {
 ```typescript
 // src/server.ts
 import express from 'express';
+import { UserRouter } from './routers/user.router';
 import { UserController } from './controllers/user.controller';
 import { UserService } from './services/user.service';
 import { UserRepository } from './repositories/user.repository';
@@ -543,10 +594,14 @@ const db = createDatabase();
 const userRepository = new UserRepository(db);
 const userService = new UserService(userRepository);
 const userController = new UserController(userService);
+const userRouter = new UserRouter(userController);
 
-// Register routes
-app.get('/api/users', userController.getAll);
-// ... more routes
+// Register router
+app.use('/api/users', userRouter.router);
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
 ```
 
 ---
